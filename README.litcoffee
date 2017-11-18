@@ -236,7 +236,7 @@ const PouchDbManager = require('@nhz.io/pouch-db-manager')
       t.throws -> new PouchDBManager
       t.ok new PouchDBManager {}
 
-## Version 0.1.2
+## Version 0.1.3
 
 ## License [MIT](LICENSE)
 
