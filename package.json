@@ -1,6 +1,6 @@
 {
   "name": "@nhz.io/pouch-db-manager",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "PouchDB Manager (Connections control)",
   "main": "index.js",
   "scripts": {
