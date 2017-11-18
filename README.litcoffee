@@ -25,7 +25,7 @@ const PouchDbManager = require('@nhz.io/pouch-db-manager')
     DefaultScheduler = require '@nhz.io/pouch-db-job-scheduler'
     sync = require '@nhz.io/pouch-db-sync-job'
     replicate = require '@nhz.io/pouch-db-replication-job'
-    { mkconf, assign } = require '@nhz.io/pouch-db-manager-helpers'
+    { mkconf, assign, priority } = require '@nhz.io/pouch-db-manager-helpers'
 
 ### Job
 
@@ -37,7 +37,7 @@ const PouchDbManager = require('@nhz.io/pouch-db-manager')
 
         { @key, @type, @queue, @live, @retry, @local, @remote } = config
 
-        @mkdefer()
+        @reset()
 
       reset: ->
 
@@ -137,7 +137,7 @@ const PouchDbManager = require('@nhz.io/pouch-db-manager')
 
         return job if job = @findJob resource
 
-        new Job @PouchDB, mkconf resource
+        new Job mkconf resource
 
       shouldStart: (job, resource) ->
 
@@ -151,7 +151,7 @@ const PouchDbManager = require('@nhz.io/pouch-db-manager')
 
       shouldStop: (job, resource) ->
 
-        resources = @resources.find { local: job.local, remote: job.remote }
+        resources = @registry.find { local: job.local, remote: job.remote }
 
         return false unless current = @findJob resource
 
