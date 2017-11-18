@@ -107,11 +107,10 @@ const pouchDbManager = require('@nhz.io/pouch-db-manager')
       @Registry = Registry
       @Resource = Registry.Resource
 
-      constructor: (@PouchDB, @schedulers) ->
+      constructor: (@schedulers) ->
 
         super()
 
-        throw TypeError 'Missing PouchDB' unless @PouchDB
         throw TypeError 'Missing schedulers' unless @schedulers
 
         @registry = new Registry {
@@ -232,11 +231,10 @@ const pouchDbManager = require('@nhz.io/pouch-db-manager')
 
     test 'PouchDBManager constructor', (t) ->
 
-      t.plan 3
+      t.plan 2
 
       t.throws -> new PouchDBManager
-      t.throws -> new PouchDBManager {}
-      t.ok new PouchDBManager {}, {}
+      t.ok new PouchDBManager {}
 
 ## Version 0.1.1
 
