@@ -127,13 +127,13 @@ const PouchDbManager = require('@nhz.io/pouch-db-manager')
 
       findJob: (resource) ->
 
+        key = resource.key or resource
+
         queues = Object.keys @schedulers
 
         return job for queue in queues when job = @schedulers[queue]?.jobs[key]
 
       getJob: (resource) ->
-
-        key = resource.key or resource
 
         return job if job = @findJob resource
 
