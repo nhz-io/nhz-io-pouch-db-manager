@@ -1,6 +1,6 @@
 {
   "name": "@nhz.io/pouch-db-manager",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "PouchDB Manager (Connections control)",
   "main": "index.js",
   "scripts": {
@@ -43,7 +43,7 @@
   },
   "dependencies": {
     "@nhz.io/abstract-resource-manager": "^0.1.1",
-    "@nhz.io/pouch-db-job-scheduler": "^0.1.0",
+    "@nhz.io/pouch-db-job-scheduler": "^0.1.1",
     "@nhz.io/pouch-db-manager-registry": "^0.1.2",
     "@nhz.io/pouch-db-replication-job": "^1.1.1",
     "@nhz.io/pouch-db-sync-job": "^1.0.0"
