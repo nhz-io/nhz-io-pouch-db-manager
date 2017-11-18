@@ -22,6 +22,7 @@ const pouchDbManager = require('@nhz.io/pouch-db-manager')
 
     AbstractResourceManager = require '@nhz.io/abstract-resource-manager'
     Registry = require '@nhz.io/pouch-db-manager-registry'
+    DefaultScheduler = require '@nhz.io/pouch-db-job-scheduler'
     sync = require '@nhz.io/pouch-db-sync-job'
     replicate = require '@nhz.io/pouch-db-replication-job'
     { mkconf, assign } = require '@nhz.io/pouch-db-manager-helpers'
@@ -30,20 +31,28 @@ const pouchDbManager = require('@nhz.io/pouch-db-manager')
 
     class Job
 
-      constructor: (PouchDB, config) ->
+      constructor: (config) ->
 
-        throw TypeError 'Missing PouchDB' unless PouchDB
         throw TypeError 'Missing config' unless config
 
         { @key, @type, @queue, @live, @retry, @local, @remote } = config
 
-        @run = null
+        @mkdefer()
 
-      start: (opts) ->
+      reset: ->
 
-        opts = assign opts, { @live, @retry }
+        @stop()
 
-        @run = switch @type
+        done = new Promise (args) => { @resolve, @reject } = args
+
+        @then = done.then.bind done
+        @catch = done.catch.bind done
+
+      start: (PouchDB, opts) ->
+
+        opts = assign { @live, @retry }, opts
+
+        run = switch @type
 
           when 'push' then replicate opts, @local, @remote
 
@@ -51,16 +60,50 @@ const pouchDbManager = require('@nhz.io/pouch-db-manager')
 
           when 'sync' then sync opts, @local, @remote
 
-        @instance = @run { @PouchDB }
+        @instance = run { PouchDB }
 
-      stop: -> @instance?.stop()
+        @instance.then @resolve
+        @instance.catch @reject
 
+        @instance
+
+      stop: (args...) -> @instance?.stop args...
+
+### Scheduler
+
+    class Scheduler extends DefaultScheduler
+
+      constructor: (args...) ->
+
+        super args
+
+        jobs = {}
+
+      prepare: (job, opts) -> () =>
+
+        instance = job.start @PouchDB, { live: false, retry: false }, opts
+
+        @jobs[job.key] = job
+
+        instance.then () => @cleanup job
+        instance.catch (err) => @cleanup job, err
+
+        instance
+
+      cleanup: (job, err) ->
+
+        delete @jobs[job.key]
+
+        job.stop(err)
+
+        null
 
 ### Manager
 
     class PouchDBManager extends AbstractResourceManager
 
       @Job = Job
+      @Scheduler = Scheduler
       @Registry = Registry
       @Resource = Registry.Resource
 
@@ -85,7 +128,7 @@ const pouchDbManager = require('@nhz.io/pouch-db-manager')
 
       findJob: (resource) ->
 
-        return job for queue in queues when job = @schedulers[queue][key]
+        return job for queue in queues when job = @schedulers[queue]?.jobs[key]
 
       getJob: (resource) ->
 
@@ -177,13 +220,7 @@ const pouchDbManager = require('@nhz.io/pouch-db-manager')
 
         scheduler.add job
 
-      stop: (job) ->
-
-        return null unless scheduler = @schedulers[job.queue]
-
-        job.stop()
-
-        scheduler.remove job
+      stop: (job) -> job.stop()
 
 ### Exports
 
