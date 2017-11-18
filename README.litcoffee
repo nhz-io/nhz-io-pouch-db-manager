@@ -77,7 +77,7 @@ const PouchDbManager = require('@nhz.io/pouch-db-manager')
 
         super args
 
-        jobs = {}
+        @jobs = {}
 
       prepare: (job, opts) -> () =>
 
