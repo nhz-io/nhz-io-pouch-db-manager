@@ -11,7 +11,7 @@ npm i -S @nhz.io/pouch-db-manager
 
 ## Usage
 ```js
-const pouchDbManager = require('@nhz.io/pouch-db-manager')
+const PouchDbManager = require('@nhz.io/pouch-db-manager')
 
 ...
 ```
