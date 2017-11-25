@@ -1,17 +1,17 @@
 {
   "name": "@nhz.io/pouch-db-manager",
-  "version": "0.1.9",
-  "description": "PouchDB Manager (Connections control)",
+  "version": "0.2.0",
+  "description": "PouchDB Connections Manager",
   "main": "index.js",
   "scripts": {
-    "start": "npm test; chokidar README.litcoffee -c 'npm test'",
-    "test": "cake lint && coffeetape README.litcoffee | faucet",
-    "lint": "cake lint",
-    "build": "npm test && cake build",
+    "start": "gulp tdd",
+    "test": "gulp test",
+    "lint": "gulp lint",
+    "build": "gulp",
+    "coveralls": "npm test && coveralls < ./coverage/lcov.info || echo Coverage Failed",
     "prepublishOnly": "npm run build",
-    "prepack": "mv README.litcoffee README.md",
-    "postpack": "mv README.md README.litcoffee",
-    "prepush": "npm test"
+    "prepush": "npm test",
+    "postpublish": "npm run coveralls"
   },
   "author": "Ishi Ruy <dev@nhz.io>",
   "homepage": "https://github.com/nhz-io/nhz-io-pouch-db-manager",
@@ -32,20 +32,29 @@
     "npm": ">= 5.x.x"
   },
   "devDependencies": {
-    "@nhz.io/coffeetape": "^2.0.2",
-    "cake": "^0.1.1",
-    "chokidar-cli": "^1.2.0",
-    "coffeelint": "^2.0.7",
+    "chai": "^4.1.2",
+    "coffee-coverage": "^2.0.1",
     "coffeescript": "^2.0.2",
-    "faucet": "0.0.1",
+    "coveralls": "^3.0.0",
+    "del": "^3.0.0",
+    "gulp": "^3.9.1",
+    "gulp-coffeelint": "^0.6.0",
+    "gulp-coffeescript": "0.0.15",
+    "gulp-spawn-mocha": "^4.0.1",
     "husky": "^0.14.3",
-    "tape-async": "^2.3.0"
+    "istanbul": "^0.4.5",
+    "mocha": "^4.0.1",
+    "pump": "^1.0.3",
+    "rollup-plugin-cleanup": "^2.0.0",
+    "rollup-plugin-commonjs": "^8.2.6",
+    "rollup-plugin-node-globals": "^1.1.0",
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-stream": "^1.24.1",
+    "sinon": "^4.1.2",
+    "sinon-chai": "^2.14.0",
+    "vinyl-source-stream": "^1.1.0"
   },
   "dependencies": {
-    "@nhz.io/abstract-resource-manager": "^0.1.1",
-    "@nhz.io/pouch-db-job-scheduler": "^0.1.1",
-    "@nhz.io/pouch-db-manager-registry": "^0.1.2",
-    "@nhz.io/pouch-db-replication-job": "^1.1.1",
-    "@nhz.io/pouch-db-sync-job": "^1.0.0"
+    "@nhz.io/arm": "^1.0.1"
   }
 }

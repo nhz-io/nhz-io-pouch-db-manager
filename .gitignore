@@ -1,7 +1,8 @@
 *
-!README.litcoffee
+!README.md
 !coffeelint.json
-!Cakefile
+!gulpfile.js
+!gulpfile.litcoffee
 !.travis.yml
 !.npmignore
 !.gitignore
@@ -9,3 +10,7 @@
 !package.json
 !package-lock.json
 !.editorconfig
+!src
+!src/*
+!test
+!test/*
