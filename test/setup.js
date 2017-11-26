@@ -1,5 +1,4 @@
 require('coffeescript/register')
-require('coffee-coverage/register-istanbul')
 
 // Setup chai
 const chai = require('chai')

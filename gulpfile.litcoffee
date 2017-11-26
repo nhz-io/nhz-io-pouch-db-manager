@@ -13,8 +13,8 @@
     coffee    = require 'gulp-coffeescript'
     lint      = require 'gulp-coffeelint'
     rollup    = require 'rollup-stream'
+    plumber   = require 'gulp-plumber'
     source    = require 'vinyl-source-stream'
-
     mocha     = require 'gulp-spawn-mocha'
 
 > Rollup Plugins
@@ -88,16 +88,17 @@
     gulp.task 'test', ['lint'], -> pump [
 
       gulp.src './test/**/*.litcoffee'
-
-      mocha {
-        require: './test/setup'
-
-        istanbul: true
-      }
+      mocha { require: './test/setup' }
 
     ]
 
 ### TDD
 
-    gulp.task 'tdd', ['test'], ->
+    gulp.task 'tdd', ->
+
+      pump [
+        gulp.src './test/**/*.litcoffee'
+        mocha { require: './test/setup' }
+      ]
+
       gulp.watch ['src/**/*.litcoffee', 'test/**/*.litcoffee'], ['test']

@@ -11,7 +11,8 @@
     "coveralls": "npm test && coveralls < ./coverage/lcov.info || echo Coverage Failed",
     "prepublishOnly": "npm run build",
     "prepush": "npm test",
-    "postpublish": "npm run coveralls"
+    "postpublish": "npm run coverage && npm run coveralls",
+    "coverage": "nyc --extension .litcoffee --reporter=lcov --reporter=text-summary mocha --require='./test/setup' -- **/*.litcoffee"
   },
   "author": "Ishi Ruy <dev@nhz.io>",
   "homepage": "https://github.com/nhz-io/nhz-io-pouch-db-manager",
@@ -40,10 +41,13 @@
     "gulp": "^3.9.1",
     "gulp-coffeelint": "^0.6.0",
     "gulp-coffeescript": "0.0.15",
+    "gulp-plumber": "^1.1.0",
     "gulp-spawn-mocha": "^4.0.1",
     "husky": "^0.14.3",
     "istanbul": "^0.4.5",
     "mocha": "^4.0.1",
+    "nyc": "^11.3.0",
+    "pouchdb-memory": "^6.0.0",
     "pump": "^1.0.3",
     "rollup-plugin-cleanup": "^2.0.0",
     "rollup-plugin-commonjs": "^8.2.6",
@@ -55,6 +59,7 @@
     "vinyl-source-stream": "^1.1.0"
   },
   "dependencies": {
-    "@nhz.io/arm": "^1.0.1"
+    "@nhz.io/arm": "^1.0.3",
+    "p-queue": "^2.3.0"
   }
 }
