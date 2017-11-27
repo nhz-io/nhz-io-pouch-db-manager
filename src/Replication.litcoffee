@@ -16,21 +16,23 @@
 
             resource.replication = switch resource.type
 
-              when 'push' then @PouchDB.replicate local, remote, opts
+              when 'push' then @PouchDB.replicate local, remote, Object.assign {since: 0}, opts
 
-              when 'pull' then @PouchDB.replicate remote, local, opts
+              when 'pull' then @PouchDB.replicate remote, local, Object.assign {since: 0}, opts
 
-              when 'sync' then @PouchDB.sync local, remote, opts
+              when 'sync' then @PouchDB.sync local, remote, Object.assign {since: 0}, opts
 
               else Promise.reject TypeError 'Invalid resource type: ' + resource.type
 
-            resource.replication.on 'change', (info) => @emit 'change', info, local, remote
-            resource.replication.on 'paused', (err) => @emit 'paused', err, local, remote
-            resource.replication.on 'active', () => @emit 'active', local, remote
-            resource.replication.on 'denied', (err) => @emit 'denied', err, local, remote
-            resource.replication.on 'complete', (info) => @emit 'complete', info, local, remote
-            resource.replication.on 'error', (err) => @emit 'error', err, local, remote
+            resource.replication.on 'change', (info) => @emit 'change', info, local, remote, resource.type
+            resource.replication.on 'paused', (err) => @emit 'paused', err, local, remote, resource.type
+            resource.replication.on 'active', () => @emit 'active', local, remote, resource.type
+            resource.replication.on 'denied', (err) => @emit 'denied', err, local, remote, resource.type
+            resource.replication.on 'complete', (info) => @emit 'complete', info, local, remote, resource.type
+            resource.replication.on 'error', (err) => @emit 'error', err, local, remote, resource.type
 
             resolve await resource.replication
+
+            resource.replication
 
     module.exports = Replication

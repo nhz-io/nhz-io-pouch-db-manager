@@ -18,15 +18,17 @@
 
           @queue.add () =>
 
-            opts = Object.assign { since: 'now' }, opts, { live: true }
+            opts = Object.assign { since: 'now' }, opts, { live: true, include_docs: true }
+
+            if resource.seq then opts.since = resource.seq
 
             resource.changes = (new @PouchDB remote).changes opts
 
-            resource.changes.on 'change', (info) => @emit 'change', info, local, remote
+            resource.changes.on 'change', (info) => @emit 'change', info, local, remote, 'live'
 
-            resource.changes.on 'complete', (info) => @emit 'complete', info, local, remote
+            resource.changes.on 'complete', (info) => @emit 'complete', info, local, remote, 'live'
 
-            resource.changes.on 'error', (err) => @emit 'error', err, local, remote
+            resource.changes.on 'error', (err) => @emit 'error', err, local, remote, 'live'
 
             resolve resource.changes
 
