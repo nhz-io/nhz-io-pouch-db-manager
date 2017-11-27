@@ -10,13 +10,13 @@
 
         { remote, identifier: local, opts } = resource
 
-        other = @registry.resources[local]?.find (r) -> r.changes and r.queue is 'live'
+        other = @registry.resources[local]?.find (r) -> r.changes and r.queue is 'poll'
 
         return resource.changes = other.changes if other
 
         new Promise (resolve, reject) =>
 
-          opts = Object.assign { since: 'now', period: 3 }, opts, { live: true }
+          opts = Object.assign { since: 'now', period: 3 }, opts, { live: true, include_docs: true }
 
           enqueue = =>
 
@@ -29,16 +29,21 @@
 
             @queue.add () =>
 
+              if resource.seq then opts.since = resource.seq
+
               resource.changes = (new @PouchDB remote).changes opts
 
-              resource.changes.on 'change', (info) => @emit 'change', info, local, remote
+              resource.changes.on 'change', (info) =>
+                resource.seq = info.seqs
+
+                @emit 'change', info, local, remote, 'poll'
 
               resource.changes.on 'complete', (info) =>
-                return @emit 'complete', info, local, remote unless resource._restart
+                return @emit 'complete', info, local, remote, 'poll' unless resource._restart
 
                 resource._restart = undefined
 
-              resource.changes.on 'error', (args...) => @emit 'error', err, local, remote
+              resource.changes.on 'error', (args...) => @emit 'error', err, local, remote, 'poll'
 
               setTimeout enqueue, opts.period * 1000
 

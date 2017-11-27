@@ -2,7 +2,7 @@
 
     arm = require '@nhz.io/arm'
 
-    { URL } = require 'url'
+    URL = require 'url'
 
     class Resource extends arm.Resource
 
@@ -23,7 +23,7 @@
 
         if name.match /^https?:\/\//
 
-          url = new URL name
+          url = URL.parse name
 
           super "#{ url.host }#{ url.pathname }"
 
