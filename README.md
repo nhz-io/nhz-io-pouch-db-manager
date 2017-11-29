@@ -17,10 +17,10 @@ const pouchDbManager = require('@nhz.io/pouch-db-manager')
 ...
 ```
 
-## Version 0.2.0
+## Version 0.2.1
 
 ## License [MIT](LICENSE)
 
 [travis]: https://img.shields.io/travis/nhz-io/nhz-io-pouch-db-manager.svg?style=flat
 [npm]: https://img.shields.io/npm/v/@nhz.io/pouch-db-manager.svg?style=flat
-[coveralls]: https://img.shields.io/coveralls/github/nhz-io/nhz-io-pouch-db-manager.svg?style=flat
+[coveralls]: https://coveralls.io/repos/github/nhz-io/nhz-io-pouch-db-manager/badge.svg?branch=v0.2.1
