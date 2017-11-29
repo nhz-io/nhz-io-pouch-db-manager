@@ -43,7 +43,7 @@
 
                 resource._restart = undefined
 
-              resource.changes.on 'error', (args...) => @emit 'error', err, local, remote, 'poll'
+              resource.changes.on 'error', (err) => @emit 'error', err, local, remote, 'poll'
 
               setTimeout enqueue, opts.period * 1000
 
