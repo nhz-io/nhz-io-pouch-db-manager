@@ -1,7 +1,7 @@
 # PouchDB Connections Manager
 
 [![Travis Build][travis]](https://travis-ci.org/nhz-io/nhz-io-pouch-db-manager)
-[![Coverage][coveralls]](https://coveralls.io/github/nhz-io/pouch-db-manager)
+[![Coverage][coveralls]](https://coveralls.io/github/nhz-io/nhz-io-pouch-db-manager)
 [![NPM Version][npm]](https://www.npmjs.com/package/@nhz.io/pouch-db-manager)
 
 ## Install
